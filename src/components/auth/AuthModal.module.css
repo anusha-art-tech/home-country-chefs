@@ -1,0 +1,44 @@
+.authModal {
+  padding: 0;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.header h2 {
+  font-size: 28px;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+}
+
+.header p {
+  color: #666;
+  font-size: 14px;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.footer p {
+  color: #666;
+  font-size: 14px;
+}
+
+.switchBtn {
+  background: none;
+  border: none;
+  color: #e67e22;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.switchBtn:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,31 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.errorMessage {
+  background: #fee;
+  color: #c33;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.forgotPassword {
+  text-align: right;
+}
+
+.linkButton {
+  background: none;
+  border: none;
+  color: #e67e22;
+  font-size: 14px;
+  text-decoration: none;
+  padding: 0;
+}
+
+.linkButton:hover {
+  text-decoration: underline;
+}
