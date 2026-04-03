@@ -1,0 +1,125 @@
+.page {
+  min-height: 100vh;
+}
+
+.hero {
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  color: white;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 56px;
+  margin-bottom: 16px;
+}
+
+.hero p {
+  font-size: 20px;
+  opacity: 0.9;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+}
+
+.info h2 {
+  font-size: 28px;
+  margin-bottom: 32px;
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.item {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.item i {
+  font-size: 24px;
+  color: #e67e22;
+  margin-top: 4px;
+}
+
+.item strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.item p {
+  color: #666;
+  line-height: 1.6;
+}
+
+.formWrapper {
+  background: #faf9f8;
+  padding: 40px;
+  border-radius: 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.textareaGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.textareaGroup label {
+  font-weight: 500;
+  font-size: 14px;
+  color: #333;
+}
+
+.textareaGroup textarea {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.textareaGroup textarea:focus {
+  outline: none;
+  border-color: #e67e22;
+}
+
+.success {
+  text-align: center;
+  padding: 40px;
+}
+
+.success i {
+  font-size: 64px;
+  color: #4caf50;
+  margin-bottom: 20px;
+}
+
+.success h3 {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 968px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,100 @@
+.section {
+  padding: 80px 0;
+  background: #faf9f8;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.title {
+  font-size: 40px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #666;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  margin-bottom: 48px;
+}
+
+.chefCard {
+  text-align: center;
+  padding: 0;
+  overflow: hidden;
+}
+
+.imageWrapper {
+  height: 280px;
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholderImage {
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholderImage i {
+  font-size: 60px;
+  color: white;
+}
+
+.chefInfo {
+  padding: 24px;
+}
+
+.chefName {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.chefCuisine {
+  color: #e67e22;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.rating i {
+  color: #fbbf24;
+}
+
+.reviews {
+  color: #666;
+  font-size: 14px;
+}
+
+.viewAll {
+  text-align: center;
+}

@@ -1,0 +1,31 @@
+.cta {
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  padding: 80px 0;
+  text-align: center;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.cta h2 {
+  font-size: 40px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.cta p {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}

@@ -1,0 +1,75 @@
+.page {
+  min-height: 100vh;
+}
+
+.hero {
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  color: white;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 56px;
+  margin-bottom: 16px;
+}
+
+.hero p {
+  font-size: 20px;
+  opacity: 0.9;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+.section {
+  margin-bottom: 60px;
+}
+
+.section h2 {
+  font-size: 32px;
+  margin-bottom: 24px;
+  color: #1a1a2e;
+}
+
+.section p {
+  color: #666;
+  line-height: 1.8;
+  font-size: 18px;
+}
+
+.features, .values {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  margin-top: 32px;
+}
+
+.feature, .value {
+  background: #faf9f8;
+  padding: 32px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.feature i {
+  font-size: 48px;
+  color: #e67e22;
+  margin-bottom: 16px;
+}
+
+.feature h3, .value strong {
+  font-size: 20px;
+  margin-bottom: 12px;
+  display: block;
+  color: #1a1a2e;
+}
+
+.feature p, .value p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+}
