@@ -1,0 +1,110 @@
+.calendar {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.navBtn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.navBtn:hover {
+  background: #f0f0f0;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.weekday {
+  font-weight: 600;
+  color: #666;
+  font-size: 14px;
+  padding: 10px;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.day {
+  text-align: center;
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.day:hover:not(.empty) {
+  background: #fff5eb;
+}
+
+.empty {
+  cursor: default;
+}
+
+.today {
+  background: #ffe6d5;
+  color: #e67e22;
+  font-weight: 600;
+}
+
+.selected {
+  background: #e67e22;
+  color: white;
+}
+
+.timeSlots {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.timeSlots h4 {
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.timeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+}
+
+.timeSlot {
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.timeSlot:hover {
+  border-color: #e67e22;
+  background: #fff5eb;
+}
+
+.timeSlot.selected {
+  background: #e67e22;
+  color: white;
+  border-color: #e67e22;
+}

@@ -1,0 +1,26 @@
+.page {
+  min-height: 100vh;
+  background: #faf9f8;
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 40px;
+}
+
+.loading {
+  text-align: center;
+  padding: 100px;
+  font-size: 20px;
+  color: #666;
+}
+
+@media (max-width: 968px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
