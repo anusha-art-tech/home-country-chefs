@@ -1,0 +1,137 @@
+.profile {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  background: linear-gradient(135deg, #fff5eb, white);
+  padding: 40px;
+  border-radius: 24px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar i {
+  font-size: 60px;
+  color: white;
+}
+
+.info {
+  flex: 1;
+}
+
+.info h1 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.cuisine {
+  color: #e67e22;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.stats {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  font-size: 14px;
+}
+
+.stat i {
+  color: #e67e22;
+}
+
+.bio, .specialties, .reviews {
+  margin-bottom: 40px;
+}
+
+.bio h3, .specialties h3, .reviews h3 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.bio p {
+  line-height: 1.8;
+  color: #666;
+}
+
+.dishesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.dish {
+  background: #fff5eb;
+  padding: 12px 20px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dish i {
+  color: #e67e22;
+}
+
+.review {
+  background: #faf9f8;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+
+.reviewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.reviewRating {
+  display: flex;
+  gap: 4px;
+}
+
+.reviewRating i {
+  color: #ddd;
+  font-size: 14px;
+}
+
+.reviewRating i.filled {
+  color: #fbbf24;
+}
+
+.review p {
+  color: #666;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.review small {
+  color: #999;
+  font-size: 12px;
+}

@@ -1,0 +1,23 @@
+.card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.hoverable:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.small {
+  padding: 16px;
+}
+
+.medium {
+  padding: 24px;
+}
+
+.large {
+  padding: 32px;
+}

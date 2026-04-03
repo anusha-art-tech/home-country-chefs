@@ -1,0 +1,27 @@
+.page {
+  min-height: 100vh;
+  background: #faf9f8;
+}
+
+.header {
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.header p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.container {
+  max-width: 1280px;
+  margin: -30px auto 0;
+  padding: 0 20px 60px;
+}

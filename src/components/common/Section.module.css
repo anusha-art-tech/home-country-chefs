@@ -1,0 +1,55 @@
+.section {
+  padding: 80px 0;
+}
+
+.white {
+  background: white;
+}
+
+.gray {
+  background: #faf9f8;
+}
+
+.primary {
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  color: white;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.title {
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: inherit;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.primary .subtitle {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 60px 0;
+  }
+  
+  .title {
+    font-size: 32px;
+  }
+}
