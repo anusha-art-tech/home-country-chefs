@@ -42,7 +42,7 @@ const LoginForm = ({ onSuccess }) => {
       await login(formData.email, formData.password);
       onSuccess?.();
     } catch (error) {
-      setErrors({ submit: 'Invalid email or password' });
+      setErrors({ submit: error.response?.data?.message || 'Invalid email or password' });
     } finally {
       setLoading(false);
     }
@@ -73,12 +73,6 @@ const LoginForm = ({ onSuccess }) => {
         placeholder="Enter your password"
         required
       />
-      
-      <div className={styles.forgotPassword}>
-        <button type="button" className={styles.linkButton}>
-          Forgot Password?
-        </button>
-      </div>
       
       <Button type="submit" fullWidth disabled={loading}>
         {loading ? 'Signing in...' : 'Sign In'}

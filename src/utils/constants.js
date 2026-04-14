@@ -1,14 +1,14 @@
 export const CUISINES = [
-  'Italian', 'Indian', 'Chinese', 'Mexican', 'Japanese', 
+  'British', 'Italian', 'Indian', 'Chinese', 'Mexican', 'Japanese', 
   'Thai', 'French', 'Spanish', 'Middle Eastern', 'Greek',
   'Vietnamese', 'Korean', 'Moroccan', 'Turkish', 'Brazilian'
 ];
 
 export const PRICE_RANGES = [
-  { label: '$50-100', min: 50, max: 100 },
-  { label: '$100-150', min: 100, max: 150 },
-  { label: '$150-200', min: 150, max: 200 },
-  { label: '$200+', min: 200, max: Infinity }
+  { label: '£50-100', min: 50, max: 100 },
+  { label: '£100-150', min: 100, max: 150 },
+  { label: '£150-200', min: 150, max: 200 },
+  { label: '£200+', min: 200, max: Infinity }
 ];
 
 export const TIME_SLOTS = [

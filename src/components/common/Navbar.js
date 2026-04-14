@@ -6,11 +6,11 @@ import styles from './Navbar.module.css';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate('/');
   };
 
@@ -31,6 +31,8 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               <Link to="/dashboard" className={styles.navLink}>Dashboard</Link>
+              <Link to="/profile" className={styles.navLink}>Profile</Link>
+              {user?.role === 'chef' && <Link to="/cuisines" className={styles.navLink}>Cuisines</Link>}
               <Button variant="outline" size="small" onClick={handleLogout}>
                 Logout
               </Button>

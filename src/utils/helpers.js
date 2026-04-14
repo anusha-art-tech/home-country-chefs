@@ -1,5 +1,5 @@
 export const formatDate = (date) => {
-  return new Date(date).toLocaleDateString('en-US', {
+  return new Date(date).toLocaleDateString('en-GB', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
@@ -7,7 +7,10 @@ export const formatDate = (date) => {
 };
 
 export const formatPrice = (price) => {
-  return `$${price.toFixed(2)}`;
+  return new Intl.NumberFormat('en-GB', {
+    style: 'currency',
+    currency: 'GBP',
+  }).format(Number(price || 0));
 };
 
 export const calculateAverageRating = (reviews) => {
@@ -28,4 +31,41 @@ export const getInitials = (name) => {
     .join('')
     .toUpperCase()
     .slice(0, 2);
+};
+
+export const upcomingStatuses = ['pending', 'confirmed', 'in_progress'];
+
+export const normalizeChef = (chef) => {
+  if (!chef) return null;
+  const reviewItems = Array.isArray(chef.reviews) ? chef.reviews : [];
+  const cuisines = Array.isArray(chef.Cuisines) ? chef.Cuisines : [];
+
+  return {
+    ...chef,
+    verified: chef.isVerified,
+    reviewItems,
+    reviews: chef.totalReviews ?? reviewItems.length ?? 0,
+    location: [chef.city, chef.state].filter(Boolean).join(', '),
+    displayName: chef.name || chef.user?.name || 'Chef',
+    cuisines,
+    cuisineNames: cuisines.map((item) => item.name).filter(Boolean),
+  };
+};
+
+export const normalizeBooking = (booking) => {
+  if (!booking) return null;
+
+  return {
+    ...booking,
+    customerName: booking.user?.name || booking.customerName || 'Customer',
+    chefName: booking.chefName || booking.chef?.name || 'Chef',
+    location: [booking.address, booking.city, booking.state].filter(Boolean).join(', '),
+  };
+};
+
+export const getRoleLabel = (role) => {
+  if (role === 'customer') return 'Customer';
+  if (role === 'chef') return 'Chef';
+  if (role === 'admin') return 'Admin';
+  return role;
 };

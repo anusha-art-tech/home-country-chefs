@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import BookingCard from './BookingCard';
+import { upcomingStatuses } from '../../utils/helpers';
 import styles from './UserDashboard.module.css';
 
-const UserDashboard = ({ user, bookings }) => {
+const UserDashboard = ({ user, bookings, stats, onCancelBooking }) => {
   const [activeTab, setActiveTab] = useState('upcoming');
 
-  const upcomingBookings = bookings?.filter(b => b.status === 'upcoming') || [];
-  const pastBookings = bookings?.filter(b => b.status === 'completed') || [];
+  const upcomingBookings = bookings?.filter((booking) => upcomingStatuses.includes(booking.status)) || [];
+  const pastBookings = bookings?.filter((booking) => !upcomingStatuses.includes(booking.status)) || [];
 
   return (
     <div className={styles.dashboard}>
@@ -33,7 +35,7 @@ const UserDashboard = ({ user, bookings }) => {
         <div className={styles.stat}>
           <i className="fas fa-heart"></i>
           <div>
-            <h3>12</h3>
+            <h3>{stats?.totalFavorites || 0}</h3>
             <span>Favorite Chefs</span>
           </div>
         </div>
@@ -59,12 +61,12 @@ const UserDashboard = ({ user, bookings }) => {
           <div className={styles.empty}>
             <i className="fas fa-calendar-alt"></i>
             <p>No upcoming bookings</p>
-            <a href="/chefs">Browse Chefs</a>
+            <Link to="/chefs">Browse Chefs</Link>
           </div>
         )}
         
         {activeTab === 'upcoming' && upcomingBookings.map(booking => (
-          <BookingCard key={booking.id} booking={booking} type="upcoming" />
+          <BookingCard key={booking.id} booking={booking} type="upcoming" onCancel={() => onCancelBooking?.(booking.id)} />
         ))}
         
         {activeTab === 'past' && pastBookings.map(booking => (

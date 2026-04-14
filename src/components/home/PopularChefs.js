@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
 import Card from '../common/Card';
+import { chefsAPI } from '../../services/api';
+import { normalizeChef } from '../../utils/helpers';
 import styles from './PopularChefs.module.css';
-
-const chefs = [
-  { id: 1, name: 'Chef Maria Lopez', cuisine: 'Mexican', rating: 4.9, reviews: 128, image: null },
-  { id: 2, name: 'Chef Rajesh Kumar', cuisine: 'Indian', rating: 4.8, reviews: 95, image: null },
-  { id: 3, name: 'Chef Wei Zhang', cuisine: 'Chinese', rating: 4.9, reviews: 156, image: null },
-  { id: 4, name: 'Chef Giovanni Rossi', cuisine: 'Italian', rating: 5.0, reviews: 203, image: null }
-];
 
 const PopularChefs = () => {
   const navigate = useNavigate();
+  const [chefs, setChefs] = useState([]);
+
+  useEffect(() => {
+    const fetchChefs = async () => {
+      try {
+        const response = await chefsAPI.getTop(4);
+        setChefs(response.data.data.map(normalizeChef));
+      } catch (error) {
+        setChefs([]);
+      }
+    };
+
+    fetchChefs();
+  }, []);
 
   return (
     <section className={styles.section}>

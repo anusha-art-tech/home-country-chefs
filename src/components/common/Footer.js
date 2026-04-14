@@ -13,10 +13,10 @@ const Footer = () => {
               Bringing authentic home-country cooking to your table, wherever you are in the world.
             </p>
             <div className={styles.social}>
-              <a href="#"><i className="fab fa-facebook"></i></a>
-              <a href="#"><i className="fab fa-instagram"></i></a>
-              <a href="#"><i className="fab fa-twitter"></i></a>
-              <a href="#"><i className="fab fa-linkedin"></i></a>
+              <a href="https://facebook.com" target="_blank" rel="noreferrer"><i className="fab fa-facebook"></i></a>
+              <a href="https://instagram.com" target="_blank" rel="noreferrer"><i className="fab fa-instagram"></i></a>
+              <a href="https://twitter.com" target="_blank" rel="noreferrer"><i className="fab fa-twitter"></i></a>
+              <a href="https://linkedin.com" target="_blank" rel="noreferrer"><i className="fab fa-linkedin"></i></a>
             </div>
           </div>
           <div className={styles.links}>
@@ -35,8 +35,8 @@ const Footer = () => {
           </div>
           <div className={styles.contact}>
             <h4>Contact Us</h4>
-            <p><i className="fas fa-envelope"></i> support@originfoods.com</p>
-            <p><i className="fas fa-phone"></i> +1 (555) 123-4567</p>
+            <p><i className="fas fa-envelope"></i> support@originfoods.co.uk</p>
+            <p><i className="fas fa-phone"></i> +44 20 7946 0958</p>
           </div>
         </div>
         <div className={styles.copyright}>

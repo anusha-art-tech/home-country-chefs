@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState, useContext } from 'react';
+import { authAPI, tokenStorage } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -9,7 +10,9 @@ export const AuthProvider = ({ children }) => {
     const storedUser = localStorage.getItem('origin-foods-user');
     return storedUser ? JSON.parse(storedUser) : null;
   });
-  const [isAuthenticated, setIsAuthenticated] = useState(() => Boolean(localStorage.getItem('token')));
+  const [chefProfile, setChefProfile] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => Boolean(tokenStorage.get()));
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
@@ -20,43 +23,94 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('origin-foods-user');
   }, [user]);
 
-  const login = (email, _password) => {
-    const isChefAccount = email.toLowerCase().includes('chef');
-    const mockUser = {
-      id: isChefAccount ? 101 : 1,
-      name: isChefAccount ? 'Chef Demo' : 'John Doe',
-      email,
-      role: isChefAccount ? 'chef' : 'user'
+  useEffect(() => {
+    const bootstrapAuth = async () => {
+      const token = tokenStorage.get();
+
+      if (!token) {
+        setAuthLoading(false);
+        return;
+      }
+
+      try {
+        const response = await authAPI.getMe();
+        setUser(response.data.data.user);
+        setChefProfile(response.data.data.chefProfile || null);
+        setIsAuthenticated(true);
+      } catch (error) {
+        tokenStorage.clear();
+        setUser(null);
+        setChefProfile(null);
+        setIsAuthenticated(false);
+      } finally {
+        setAuthLoading(false);
+      }
     };
 
-    setUser(mockUser);
+    bootstrapAuth();
+  }, []);
+
+  const login = async (email, password) => {
+    const response = await authAPI.login(email, password);
+    const { token, data } = response.data;
+
+    tokenStorage.set(token);
+    setUser(data.user);
+    setChefProfile(data.chefProfile || null);
     setIsAuthenticated(true);
-    localStorage.setItem('token', 'mock-token');
-    return true;
+
+    return data.user;
   };
 
-  const register = (userData) => {
-    const newUser = {
-      id: Date.now(),
-      ...userData,
-      role: userData.role || 'user'
-    };
+  const register = async (userData) => {
+    const response = await authAPI.register(userData);
+    const { token, data } = response.data;
 
-    setUser(newUser);
+    tokenStorage.set(token);
+    setUser(data.user);
+    setChefProfile(data.chefProfile || null);
     setIsAuthenticated(true);
-    localStorage.setItem('token', 'mock-token');
-    return true;
+
+    return data.user;
   };
 
-  const logout = () => {
+  const refreshAuth = async () => {
+    const response = await authAPI.getMe();
+    setUser(response.data.data.user);
+    setChefProfile(response.data.data.chefProfile || null);
+    setIsAuthenticated(true);
+    return response.data.data;
+  };
+
+  const logout = async () => {
+    try {
+      if (tokenStorage.get()) {
+        await authAPI.logout();
+      }
+    } catch (error) {
+      // Clear client auth state even if logout request fails.
+    }
+
     setUser(null);
+    setChefProfile(null);
     setIsAuthenticated(false);
-    localStorage.removeItem('token');
+    tokenStorage.clear();
     localStorage.removeItem('origin-foods-user');
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, register, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        chefProfile,
+        isAuthenticated,
+        authLoading,
+        login,
+        register,
+        logout,
+        refreshAuth,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

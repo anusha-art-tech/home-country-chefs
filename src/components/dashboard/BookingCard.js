@@ -1,12 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
 import styles from './BookingCard.module.css';
 
-const BookingCard = ({ booking, type }) => {
+const BookingCard = ({ booking, type, onCancel }) => {
+  const navigate = useNavigate();
   const statusColors = {
-    upcoming: '#e67e22',
+    pending: '#e67e22',
+    confirmed: '#2e90fa',
+    in_progress: '#155eef',
     completed: '#4caf50',
-    cancelled: '#e74c3c'
+    cancelled: '#e74c3c',
+    refunded: '#7a5af8',
   };
 
   return (
@@ -46,12 +51,11 @@ const BookingCard = ({ booking, type }) => {
         </span>
         {type === 'upcoming' && (
           <div className={styles.actions}>
-            <Button variant="outline" size="small">Reschedule</Button>
-            <Button variant="secondary" size="small">Cancel</Button>
+            <Button variant="secondary" size="small" onClick={onCancel}>Cancel</Button>
           </div>
         )}
         {type === 'past' && (
-          <Button variant="outline" size="small">Write a Review</Button>
+          <Button variant="outline" size="small" onClick={() => navigate(`/reviews/new/${booking.id}`)}>Write a Review</Button>
         )}
       </div>
     </div>

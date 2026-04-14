@@ -39,21 +39,21 @@ const ContactPage = () => {
                 <i className="fas fa-map-marker-alt"></i>
                 <div>
                   <strong>Address</strong>
-                  <p>123 Foodie Lane, Culinary District, NY 10001</p>
+                  <p>24 Borough Market Street, London SE1 9AL</p>
                 </div>
               </div>
               <div className={styles.item}>
                 <i className="fas fa-phone"></i>
                 <div>
                   <strong>Phone</strong>
-                  <p>+1 (555) 123-4567</p>
+                  <p>+44 20 7946 0958</p>
                 </div>
               </div>
               <div className={styles.item}>
                 <i className="fas fa-envelope"></i>
                 <div>
                   <strong>Email</strong>
-                  <p>support@originfoods.com</p>
+                  <p>support@originfoods.co.uk</p>
                 </div>
               </div>
               <div className={styles.item}>

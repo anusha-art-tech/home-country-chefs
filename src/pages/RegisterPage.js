@@ -9,7 +9,7 @@ const RegisterPage = () => {
     <section style={{ padding: '4rem 1.5rem', maxWidth: '560px', margin: '0 auto' }}>
       <h1 style={{ marginBottom: '0.75rem' }}>Create your account</h1>
       <p style={{ marginBottom: '2rem', color: '#5b6470' }}>
-        Join Origin Foods to discover chefs and book personalized dining experiences.
+        Join Origin Foods as a customer or chef and complete your profile during signup.
       </p>
       <RegisterForm onSuccess={() => navigate('/dashboard')} />
       <p style={{ marginTop: '1.5rem' }}>

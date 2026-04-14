@@ -3,7 +3,7 @@ import Button from '../common/Button';
 import Input from '../common/Input';
 import styles from './BookingForm.module.css';
 
-const BookingForm = ({ chef, onSubmit, onCancel }) => {
+const BookingForm = ({ chef, onSubmit, onCancel, submitting = false }) => {
   const [formData, setFormData] = useState({
     date: '',
     time: '',
@@ -11,7 +11,9 @@ const BookingForm = ({ chef, onSubmit, onCancel }) => {
     specialRequests: '',
     address: '',
     city: '',
-    postalCode: ''
+    state: '',
+    country: '',
+    zipCode: ''
   });
   const [errors, setErrors] = useState({});
 
@@ -107,9 +109,25 @@ const BookingForm = ({ chef, onSubmit, onCancel }) => {
           />
           
           <Input
-            label="Postal Code"
-            name="postalCode"
-            value={formData.postalCode}
+            label="Postcode"
+            name="zipCode"
+            value={formData.zipCode}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className={styles.row}>
+          <Input
+            label="State"
+            name="state"
+            value={formData.state}
+            onChange={handleChange}
+          />
+
+          <Input
+            label="Country"
+            name="country"
+            value={formData.country}
             onChange={handleChange}
           />
         </div>
@@ -131,8 +149,8 @@ const BookingForm = ({ chef, onSubmit, onCancel }) => {
         <Button variant="outline" onClick={onCancel}>
           Cancel
         </Button>
-        <Button type="submit">
-          Continue to Payment
+        <Button type="submit" disabled={submitting}>
+          {submitting ? 'Saving Booking...' : 'Confirm Booking'}
         </Button>
       </div>
     </form>

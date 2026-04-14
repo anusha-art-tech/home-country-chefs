@@ -11,9 +11,6 @@ const LoginPage = () => {
       <p style={{ marginBottom: '2rem', color: '#5b6470' }}>
         Sign in to manage your bookings and chef experiences.
       </p>
-      <p style={{ marginBottom: '1rem', color: '#8b4c18', fontSize: '0.95rem' }}>
-        Use an email containing <strong>chef</strong> to preview the chef dashboard.
-      </p>
       <LoginForm onSuccess={() => navigate('/dashboard')} />
       <p style={{ marginTop: '1.5rem' }}>
         Don&apos;t have an account? <Link to="/register">Create one</Link>

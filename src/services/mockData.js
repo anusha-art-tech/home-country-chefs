@@ -5,9 +5,9 @@ export const mockChefs = [
     cuisine: 'Mexican',
     rating: 4.9,
     reviews: 128,
-    location: 'Los Angeles, CA',
+    location: 'London, UK',
     experience: 12,
-    pricePerService: 150,
+    pricePerService: 120,
     verified: true,
     bio: 'Born and raised in Oaxaca, Mexico, Chef Maria brings authentic family recipes passed down through generations. Her passion is sharing the true flavors of Mexican home cooking.',
     signatureDishes: ['Tacos al Pastor', 'Mole Poblano', 'Chiles En Nogada', 'Tamales'],
@@ -28,7 +28,7 @@ export const mockBookings = [
     date: '2024-02-20',
     time: '6:00 PM',
     guests: 4,
-    location: 'Los Angeles, CA',
+    location: 'London, UK',
     status: 'upcoming'
   },
   {
@@ -39,7 +39,7 @@ export const mockBookings = [
     date: '2024-02-15',
     time: '7:00 PM',
     guests: 6,
-    location: 'New York, NY',
+    location: 'Birmingham, UK',
     status: 'completed'
   }
 ];

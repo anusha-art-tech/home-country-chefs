@@ -4,6 +4,16 @@
   gap: 20px;
 }
 
+.twoColumnGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
 .errorMessage {
   background: #fee;
   color: #c33;
@@ -52,4 +62,10 @@
   background: #e67e22;
   border-color: #e67e22;
   color: #fff;
+}
+
+@media (max-width: 768px) {
+  .twoColumnGrid {
+    grid-template-columns: 1fr;
+  }
 }

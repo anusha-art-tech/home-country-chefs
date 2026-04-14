@@ -1,10 +1,11 @@
 import React from 'react';
+import { formatPrice } from '../../utils/helpers';
 import styles from './BookingSummary.module.css';
 
 const BookingSummary = ({ chef, bookingDetails }) => {
   const calculateTotal = () => {
     const basePrice = chef?.pricePerService || 150;
-    const guestFee = (bookingDetails?.guests || 2) * 10;
+    const guestFee = (bookingDetails?.guests || 2) * (chef?.pricePerGuest || 0);
     const serviceFee = basePrice * 0.1;
     return basePrice + guestFee + serviceFee;
   };
@@ -49,19 +50,19 @@ const BookingSummary = ({ chef, bookingDetails }) => {
       <div className={styles.pricing}>
         <div className={styles.row}>
           <span>Cooking Service</span>
-          <span>${chef?.pricePerService || 150}</span>
+          <span>{formatPrice(chef?.pricePerService || 150)}</span>
         </div>
         <div className={styles.row}>
-          <span>Additional Guests (${(bookingDetails?.guests || 2) * 10})</span>
-          <span>${(bookingDetails?.guests || 2) * 10}</span>
+          <span>Additional Guests</span>
+          <span>{formatPrice((bookingDetails?.guests || 2) * (chef?.pricePerGuest || 0))}</span>
         </div>
         <div className={styles.row}>
           <span>Service Fee</span>
-          <span>${((chef?.pricePerService || 150) * 0.1).toFixed(2)}</span>
+          <span>{formatPrice((chef?.pricePerService || 150) * 0.1)}</span>
         </div>
         <div className={`${styles.row} ${styles.total}`}>
           <span>Total</span>
-          <span>${calculateTotal().toFixed(2)}</span>
+          <span>{formatPrice(calculateTotal())}</span>
         </div>
       </div>
       

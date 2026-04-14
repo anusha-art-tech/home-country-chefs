@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../common/Card';
 import Button from '../common/Button';
+import { formatPrice } from '../../utils/helpers';
 import styles from './ChefCard.module.css';
 
 const ChefCard = ({ chef }) => {
@@ -11,7 +12,7 @@ const ChefCard = ({ chef }) => {
     <Card hoverable className={styles.chefCard}>
       <div className={styles.imageContainer}>
         <div className={styles.chefImage}>
-          <i className="fas fa-user-chef"></i>
+          {chef.profileImage ? <img src={chef.profileImage} alt={chef.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <i className="fas fa-user-chef"></i>}
         </div>
         {chef.verified && (
           <span className={styles.verifiedBadge}>
@@ -44,7 +45,7 @@ const ChefCard = ({ chef }) => {
         </div>
         
         <div className={styles.price}>
-          <span className={styles.priceAmount}>${chef.pricePerService}</span>
+          <span className={styles.priceAmount}>{formatPrice(chef.pricePerService)}</span>
           <span className={styles.priceLabel}>/ per service</span>
         </div>
         

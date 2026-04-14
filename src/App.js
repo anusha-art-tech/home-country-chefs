@@ -7,6 +7,9 @@ import ChefsPage from './pages/ChefsPage';
 import ChefDetailPage from './pages/ChefDetailPage';
 import BookingPage from './pages/BookingPage';
 import DashboardPage from './pages/DashboardPage';
+import ReviewPage from './pages/ReviewPage';
+import ProfilePage from './pages/ProfilePage';
+import CuisinesPage from './pages/CuisinesPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import LoginPage from './pages/LoginPage';
@@ -16,13 +19,15 @@ import styles from './App.module.css';
 
 // Protected Route Component - Redirects to login if not authenticated
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, authLoading } = useAuth();
+  if (authLoading) return <LoadingSpinner />;
   return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
 // Public Route - Redirects to dashboard if already authenticated
 const PublicRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, authLoading } = useAuth();
+  if (authLoading) return <LoadingSpinner />;
   return !isAuthenticated ? children : <Navigate to="/dashboard" replace />;
 };
 
@@ -71,6 +76,30 @@ const AppContent = () => {
             <DashboardPage />
           </ProtectedRoute>
         } 
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/cuisines"
+        element={
+          <ProtectedRoute>
+            <CuisinesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reviews/new/:bookingId"
+        element={
+          <ProtectedRoute>
+            <ReviewPage />
+          </ProtectedRoute>
+        }
       />
       
       {/* Fallback Route - 404 Page */}
