@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { chefsAPI } from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
+import { normalizeMediaUrl } from '../../utils/helpers';
 
 const sectionStyle = {
   background: '#fff',
@@ -34,7 +35,8 @@ const secondaryButtonStyle = {
 const CuisinesManager = ({ standalone = false }) => {
   const { chefProfile, refreshAuth } = useAuth();
   const [cuisines, setCuisines] = useState([]);
-  const [cuisineForm, setCuisineForm] = useState({ id: null, name: '', description: '' });
+  const [cuisineForm, setCuisineForm] = useState({ id: null, name: '', description: '', icon: '' });
+  const [cuisineImageFile, setCuisineImageFile] = useState(null);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -66,21 +68,28 @@ const CuisinesManager = ({ standalone = false }) => {
     if (!chefProfile?.id) return;
 
     try {
+      const payload = new FormData();
+      payload.append('name', cuisineForm.name);
+      payload.append('description', cuisineForm.description);
+
+      if (cuisineForm.icon) {
+        payload.append('icon', cuisineForm.icon);
+      }
+
+      if (cuisineImageFile) {
+        payload.append('cuisineIcon', cuisineImageFile);
+      }
+
       if (cuisineForm.id) {
-        await chefsAPI.updateCuisine(chefProfile.id, cuisineForm.id, {
-          name: cuisineForm.name,
-          description: cuisineForm.description,
-        });
+        await chefsAPI.updateCuisine(chefProfile.id, cuisineForm.id, payload);
         setMessage('Cuisine updated successfully.');
       } else {
-        await chefsAPI.createCuisine(chefProfile.id, {
-          name: cuisineForm.name,
-          description: cuisineForm.description,
-        });
+        await chefsAPI.createCuisine(chefProfile.id, payload);
         setMessage('Cuisine added successfully.');
       }
 
-      setCuisineForm({ id: null, name: '', description: '' });
+      setCuisineForm({ id: null, name: '', description: '', icon: '' });
+      setCuisineImageFile(null);
       await refreshAuth();
       await refreshCuisines();
     } catch (apiError) {
@@ -100,7 +109,8 @@ const CuisinesManager = ({ standalone = false }) => {
     try {
       await chefsAPI.deleteCuisine(chefProfile.id, cuisineId);
       if (cuisineForm.id === cuisineId) {
-        setCuisineForm({ id: null, name: '', description: '' });
+        setCuisineForm({ id: null, name: '', description: '', icon: '' });
+        setCuisineImageFile(null);
       }
       await refreshAuth();
       await refreshCuisines();
@@ -144,6 +154,21 @@ const CuisinesManager = ({ standalone = false }) => {
             onChange={(event) => setCuisineForm((current) => ({ ...current, description: event.target.value }))}
           />
         </label>
+        <label>
+          <span style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>Cuisine Image</span>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(event) => setCuisineImageFile(event.target.files?.[0] || null)}
+          />
+          {(cuisineImageFile || cuisineForm.icon) && (
+            <img
+              src={cuisineImageFile ? URL.createObjectURL(cuisineImageFile) : normalizeMediaUrl(cuisineForm.icon)}
+              alt={cuisineForm.name || 'Cuisine'}
+              style={{ width: '100%', maxWidth: '220px', height: '140px', objectFit: 'cover', marginTop: '0.75rem', borderRadius: '12px' }}
+            />
+          )}
+        </label>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           <button type="submit" disabled={loading} style={buttonStyle}>
             {cuisineForm.id ? 'Update Cuisine' : 'Add Cuisine'}
@@ -151,7 +176,10 @@ const CuisinesManager = ({ standalone = false }) => {
           {cuisineForm.id && (
             <button
               type="button"
-              onClick={() => setCuisineForm({ id: null, name: '', description: '' })}
+              onClick={() => {
+                setCuisineForm({ id: null, name: '', description: '', icon: '' });
+                setCuisineImageFile(null);
+              }}
               style={secondaryButtonStyle}
             >
               Cancel Edit
@@ -163,27 +191,50 @@ const CuisinesManager = ({ standalone = false }) => {
       <div style={{ display: 'grid', gap: '1rem' }}>
         {cuisines.length === 0 && <p style={{ margin: 0, color: '#5b6470' }}>No cuisines added yet.</p>}
         {cuisines.map((cuisine) => (
-          <div key={cuisine.id} style={{ border: '1px solid #e5e7eb', borderRadius: '14px', padding: '1rem', display: 'grid', gap: '0.75rem' }}>
-            <div>
-              <strong>{cuisine.name}</strong>
-              {cuisine.description && <p style={{ margin: '0.45rem 0 0', color: '#5b6470' }}>{cuisine.description}</p>}
+          <div
+            key={cuisine.id}
+            style={{
+              border: '1px solid #e5e7eb',
+              borderRadius: '14px',
+              padding: '1rem',
+              display: 'grid',
+              gap: '1rem',
+              gridTemplateColumns: cuisine.icon ? 'repeat(auto-fit, minmax(220px, 1fr))' : 'minmax(0, 1fr)',
+              alignItems: 'center',
+            }}
+          >
+            <div style={{ display: 'grid', gap: '0.75rem' }}>
+              <div>
+                <strong>{cuisine.name}</strong>
+                {cuisine.description && <p style={{ margin: '0.45rem 0 0', color: '#5b6470' }}>{cuisine.description}</p>}
+              </div>
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCuisineForm({ id: cuisine.id, name: cuisine.name, description: cuisine.description || '', icon: cuisine.icon || '' });
+                    setCuisineImageFile(null);
+                  }}
+                  style={secondaryButtonStyle}
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleCuisineDelete(cuisine.id)}
+                  style={secondaryButtonStyle}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
-            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              <button
-                type="button"
-                onClick={() => setCuisineForm({ id: cuisine.id, name: cuisine.name, description: cuisine.description || '' })}
-                style={secondaryButtonStyle}
-              >
-                Edit
-              </button>
-              <button
-                type="button"
-                onClick={() => handleCuisineDelete(cuisine.id)}
-                style={secondaryButtonStyle}
-              >
-                Delete
-              </button>
-            </div>
+            {cuisine.icon && (
+              <img
+                src={normalizeMediaUrl(cuisine.icon)}
+                alt={cuisine.name}
+                style={{ width: '100%', maxWidth: '220px', height: '140px', objectFit: 'cover', borderRadius: '12px', justifySelf: 'end' }}
+              />
+            )}
           </div>
         ))}
       </div>

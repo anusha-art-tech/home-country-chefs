@@ -1,15 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import ChefFilters from '../components/chefs/ChefFilters';
 import ChefGrid from '../components/chefs/ChefGrid';
-import { chefsAPI } from '../services/api';
+import { useAuth } from '../hooks/useAuth';
+import { chefsAPI, usersAPI } from '../services/api';
 import { normalizeChef } from '../utils/helpers';
 import styles from './ChefsPage.module.css';
 
 const ChefsPage = () => {
+  const { user } = useAuth();
   const [filters, setFilters] = useState({});
   const [chefs, setChefs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [favoriteChefIds, setFavoriteChefIds] = useState(new Set());
+  const [favoriteBusyIds, setFavoriteBusyIds] = useState(new Set());
 
   useEffect(() => {
     const fetchChefs = async () => {
@@ -43,6 +47,24 @@ const ChefsPage = () => {
     fetchChefs();
   }, [filters]);
 
+  useEffect(() => {
+    if (user?.role !== 'customer') {
+      setFavoriteChefIds(new Set());
+      return;
+    }
+
+    const loadFavorites = async () => {
+      try {
+        const response = await usersAPI.getFavorites();
+        setFavoriteChefIds(new Set((response.data.data || []).map((chef) => Number(chef.id))));
+      } catch (_error) {
+        setFavoriteChefIds(new Set());
+      }
+    };
+
+    loadFavorites();
+  }, [user?.role]);
+
   const handleFilterChange = useCallback((nextFilters) => {
     setFilters((currentFilters) => {
       const currentValue = JSON.stringify(currentFilters);
@@ -50,6 +72,32 @@ const ChefsPage = () => {
       return currentValue === nextValue ? currentFilters : nextFilters;
     });
   }, []);
+
+  const handleToggleFavorite = async (chef) => {
+    if (user?.role !== 'customer') return;
+
+    setFavoriteBusyIds((current) => new Set([...current, chef.id]));
+
+    try {
+      if (favoriteChefIds.has(chef.id)) {
+        await usersAPI.removeFavorite(chef.id);
+        setFavoriteChefIds((current) => {
+          const next = new Set(current);
+          next.delete(chef.id);
+          return next;
+        });
+      } else {
+        await usersAPI.addFavorite(chef.id);
+        setFavoriteChefIds((current) => new Set([...current, chef.id]));
+      }
+    } finally {
+      setFavoriteBusyIds((current) => {
+        const next = new Set(current);
+        next.delete(chef.id);
+        return next;
+      });
+    }
+  };
 
   return (
     <div className={styles.page}>
@@ -60,7 +108,13 @@ const ChefsPage = () => {
       <div className={styles.container}>
         <ChefFilters onFilterChange={handleFilterChange} />
         {error && <p style={{ color: '#b3261e' }}>{error}</p>}
-        <ChefGrid chefs={chefs} loading={loading} />
+        <ChefGrid
+          chefs={chefs}
+          loading={loading}
+          favoriteChefIds={favoriteChefIds}
+          favoriteBusyIds={favoriteBusyIds}
+          onToggleFavorite={user?.role === 'customer' ? handleToggleFavorite : undefined}
+        />
       </div>
     </div>
   );

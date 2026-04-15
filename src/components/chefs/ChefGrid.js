@@ -2,7 +2,7 @@ import React from 'react';
 import ChefCard from './ChefCard';
 import styles from './ChefGrid.module.css';
 
-const ChefGrid = ({ chefs, loading }) => {
+const ChefGrid = ({ chefs, loading, favoriteChefIds, favoriteBusyIds, onToggleFavorite }) => {
   if (loading) {
     return (
       <div className={styles.loading}>
@@ -25,7 +25,13 @@ const ChefGrid = ({ chefs, loading }) => {
   return (
     <div className={styles.grid}>
       {chefs.map(chef => (
-        <ChefCard key={chef.id} chef={chef} />
+        <ChefCard
+          key={chef.id}
+          chef={chef}
+          isFavorite={favoriteChefIds?.has?.(chef.id)}
+          favoriteDisabled={favoriteBusyIds?.has?.(chef.id)}
+          onToggleFavorite={onToggleFavorite}
+        />
       ))}
     </div>
   );

@@ -4,11 +4,12 @@ import BookingCard from './BookingCard';
 import { upcomingStatuses } from '../../utils/helpers';
 import styles from './UserDashboard.module.css';
 
-const UserDashboard = ({ user, bookings, stats, onCancelBooking }) => {
+const UserDashboard = ({ user, bookings, reviews, stats, onCancelBooking, onDeleteReview }) => {
   const [activeTab, setActiveTab] = useState('upcoming');
 
   const upcomingBookings = bookings?.filter((booking) => upcomingStatuses.includes(booking.status)) || [];
   const pastBookings = bookings?.filter((booking) => !upcomingStatuses.includes(booking.status)) || [];
+  const reviewByBookingId = new Map((reviews || []).map((review) => [Number(review.bookingId), review]));
 
   return (
     <div className={styles.dashboard}>
@@ -70,7 +71,13 @@ const UserDashboard = ({ user, bookings, stats, onCancelBooking }) => {
         ))}
         
         {activeTab === 'past' && pastBookings.map(booking => (
-          <BookingCard key={booking.id} booking={booking} type="past" />
+          <BookingCard
+            key={booking.id}
+            booking={booking}
+            type="past"
+            review={reviewByBookingId.get(Number(booking.id))}
+            onDeleteReview={onDeleteReview}
+          />
         ))}
       </div>
     </div>

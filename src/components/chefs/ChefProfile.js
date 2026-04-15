@@ -3,7 +3,7 @@ import Button from '../common/Button';
 import { formatPrice } from '../../utils/helpers';
 import styles from './ChefProfile.module.css';
 
-const ChefProfile = ({ chef, onBook }) => {
+const ChefProfile = ({ chef, onBook, isFavorite, onToggleFavorite, favoriteDisabled }) => {
   const reviews = chef.reviewItems || chef.reviewsList || [];
   const listOrEmpty = (items) => Array.isArray(items) && items.length > 0;
 
@@ -36,9 +36,17 @@ const ChefProfile = ({ chef, onBook }) => {
             </div>
           </div>
         </div>
-        <Button size="large" onClick={onBook}>
-          Book This Chef
-        </Button>
+        <div className={styles.headerActions}>
+          {onToggleFavorite && (
+            <Button variant={isFavorite ? 'secondary' : 'outline'} size="large" onClick={onToggleFavorite} disabled={favoriteDisabled}>
+              <i className={`${isFavorite ? 'fas' : 'far'} fa-heart`}></i>
+              {isFavorite ? 'Saved' : 'Save'}
+            </Button>
+          )}
+          <Button size="large" onClick={onBook}>
+            Book This Chef
+          </Button>
+        </div>
       </div>
       
       <div className={styles.bio}>
@@ -73,11 +81,20 @@ const ChefProfile = ({ chef, onBook }) => {
       {listOrEmpty(chef.cuisines) && (
         <div className={styles.specialties}>
           <h3>Offered Cuisines</h3>
-          <div className={styles.dishesList}>
+          <div className={styles.cuisineGrid}>
             {chef.cuisines.map((item) => (
-              <div key={item.id} className={styles.dish}>
-                <i className="fas fa-bowl-food"></i>
-                <span>{item.name}</span>
+              <div key={item.id} className={styles.cuisineCard}>
+                {item.icon ? (
+                  <img src={item.icon} alt={item.name} className={styles.cuisineImage} />
+                ) : (
+                  <div className={styles.cuisineImageFallback}>
+                    <i className="fas fa-bowl-food"></i>
+                  </div>
+                )}
+                <div className={styles.cuisineContent}>
+                  <strong>{item.name}</strong>
+                  {item.description && <p>{item.description}</p>}
+                </div>
               </div>
             ))}
           </div>

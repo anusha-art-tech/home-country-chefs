@@ -38,6 +38,27 @@
   color: #4caf50;
 }
 
+.favoriteBtn {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.92);
+  color: #b42318;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+}
+
+.favoriteBtnActive {
+  background: #fff1f0;
+}
+
 .content {
   padding: 20px;
 }

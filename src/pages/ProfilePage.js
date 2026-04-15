@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { authAPI, chefsAPI, usersAPI } from '../services/api';
 import { useAuth } from '../hooks/useAuth';
+import { normalizeMediaUrl } from '../utils/helpers';
 
 const sectionStyle = {
   background: '#fff',
@@ -245,7 +247,17 @@ const ProfilePage = () => {
 
       {user?.role === 'chef' && chefProfile && (
         <form onSubmit={handleChefProfileSubmit} style={{ ...sectionStyle, display: 'grid', gap: '1rem' }}>
-          <h2 style={{ margin: 0 }}>Chef Profile Details</h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            <h2 style={{ margin: 0 }}>Chef Profile Details</h2>
+            <Link
+              to={`/chef/${chefProfile.id}`}
+              target="_blank"
+              rel="noreferrer"
+              style={{ padding: '0.9rem 1.2rem', borderRadius: '12px', border: '1px solid #d1d7de', background: '#fff', color: '#111827', textDecoration: 'none', fontWeight: 600 }}
+            >
+              Public View
+            </Link>
+          </div>
           <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
             <label>
               <span style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>Cuisine</span>
@@ -289,7 +301,7 @@ const ProfilePage = () => {
             <label>
               <span style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>Profile Image</span>
               <input type="file" accept="image/*" onChange={(event) => setProfileImageFile(event.target.files?.[0] || null)} />
-              {chefProfile.profileImage && <img src={chefProfile.profileImage} alt={chefProfile.name} style={{ width: '100%', maxWidth: '180px', marginTop: '0.75rem', borderRadius: '12px' }} />}
+              {chefProfile.profileImage && <img src={normalizeMediaUrl(chefProfile.profileImage)} alt={chefProfile.name} style={{ width: '100%', maxWidth: '180px', marginTop: '0.75rem', borderRadius: '12px' }} />}
             </label>
             <label>
               <span style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600 }}>Gallery Images</span>
@@ -303,7 +315,7 @@ const ProfilePage = () => {
               <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))' }}>
                 {existingGalleryImages.map((image) => (
                   <div key={image} style={{ border: '1px solid #e5e7eb', borderRadius: '14px', padding: '0.75rem' }}>
-                    <img src={image} alt="Chef gallery" style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '10px' }} />
+                    <img src={normalizeMediaUrl(image)} alt="Chef gallery" style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '10px' }} />
                     <button
                       type="button"
                       onClick={() => setExistingGalleryImages((current) => current.filter((item) => item !== image))}

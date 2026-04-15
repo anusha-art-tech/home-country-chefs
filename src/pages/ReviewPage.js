@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { reviewsAPI } from '../services/api';
 
 const ReviewPage = () => {
   const navigate = useNavigate();
-  const { bookingId } = useParams();
+  const { bookingId, reviewId } = useParams();
   const [formData, setFormData] = useState({
     rating: 5,
     title: '',
@@ -12,6 +12,39 @@ const ReviewPage = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(Boolean(reviewId));
+  const isEditMode = Boolean(reviewId);
+
+  useEffect(() => {
+    if (!reviewId) return;
+
+    const loadReview = async () => {
+      setPageLoading(true);
+      setError('');
+
+      try {
+        const response = await reviewsAPI.getMine();
+        const currentReview = (response.data.data || []).find((item) => Number(item.id) === Number(reviewId));
+
+        if (!currentReview) {
+          setError('Review not found.');
+          return;
+        }
+
+        setFormData({
+          rating: Number(currentReview.rating),
+          title: currentReview.title || '',
+          comment: currentReview.comment || '',
+        });
+      } catch (apiError) {
+        setError(apiError.response?.data?.message || 'Unable to load review.');
+      } finally {
+        setPageLoading(false);
+      }
+    };
+
+    loadReview();
+  }, [reviewId]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -19,25 +52,39 @@ const ReviewPage = () => {
     setError('');
 
     try {
-      await reviewsAPI.create({
-        bookingId: Number(bookingId),
-        rating: Number(formData.rating),
-        title: formData.title,
-        comment: formData.comment,
-      });
+      if (isEditMode) {
+        await reviewsAPI.update(Number(reviewId), {
+          rating: Number(formData.rating),
+          title: formData.title,
+          comment: formData.comment,
+        });
+      } else {
+        await reviewsAPI.create({
+          bookingId: Number(bookingId),
+          rating: Number(formData.rating),
+          title: formData.title,
+          comment: formData.comment,
+        });
+      }
       navigate('/dashboard');
     } catch (apiError) {
-      setError(apiError.response?.data?.message || 'Unable to submit review.');
+      setError(apiError.response?.data?.message || `Unable to ${isEditMode ? 'update' : 'submit'} review.`);
     } finally {
       setLoading(false);
     }
   };
 
+  if (pageLoading) {
+    return <section style={{ padding: '4rem 1.5rem', maxWidth: '680px', margin: '0 auto' }}>Loading review...</section>;
+  }
+
   return (
     <section style={{ padding: '4rem 1.5rem', maxWidth: '680px', margin: '0 auto' }}>
-      <h1 style={{ marginBottom: '0.75rem' }}>Write a review</h1>
+      <h1 style={{ marginBottom: '0.75rem' }}>{isEditMode ? 'Edit your review' : 'Write a review'}</h1>
       <p style={{ marginBottom: '2rem', color: '#5b6470' }}>
-        Share how your booking went so other customers can choose confidently.
+        {isEditMode
+          ? 'Update your feedback and rating for this booking.'
+          : 'Share how your booking went so other customers can choose confidently.'}
       </p>
       {error && (
         <div style={{ marginBottom: '1rem', padding: '0.85rem 1rem', borderRadius: '12px', background: '#fdecea', color: '#b3261e' }}>
@@ -81,7 +128,7 @@ const ReviewPage = () => {
             Cancel
           </button>
           <button type="submit" disabled={loading} style={{ padding: '0.9rem 1.2rem', borderRadius: '12px', border: 'none', background: '#c96a20', color: '#fff' }}>
-            {loading ? 'Submitting...' : 'Submit Review'}
+            {loading ? (isEditMode ? 'Saving...' : 'Submitting...') : (isEditMode ? 'Save Review' : 'Submit Review')}
           </button>
         </div>
       </form>

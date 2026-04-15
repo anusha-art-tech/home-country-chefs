@@ -3,7 +3,7 @@ import { useAuth } from '../hooks/useAuth';
 import UserDashboard from '../components/dashboard/UserDashboard';
 import ChefDashboard from '../components/dashboard/ChefDashboard';
 import AdminDashboard from '../components/dashboard/AdminDashboard';
-import { adminAPI, bookingsAPI, usersAPI } from '../services/api';
+import { adminAPI, bookingsAPI, reviewsAPI, usersAPI } from '../services/api';
 import { normalizeBooking } from '../utils/helpers';
 import styles from './DashboardPage.module.css';
 
@@ -12,6 +12,7 @@ const DashboardPage = () => {
   const userRole = user?.role || 'customer';
   const [payload, setPayload] = useState({
     bookings: [],
+    reviews: [],
     stats: null,
     users: [],
     chefs: [],
@@ -38,23 +39,27 @@ const DashboardPage = () => {
             users: usersResponse.data.data,
             chefs: chefsResponse.data.data,
             bookings: bookingsResponse.data.data.map(normalizeBooking),
+            reviews: [],
           });
         } else if (userRole === 'chef') {
           const bookingsResponse = await bookingsAPI.getChefBookings();
           setPayload({
             bookings: bookingsResponse.data.data.map(normalizeBooking),
+            reviews: [],
             stats: null,
             users: [],
             chefs: [],
           });
         } else {
-          const [bookingsResponse, statsResponse] = await Promise.all([
+          const [bookingsResponse, statsResponse, reviewsResponse] = await Promise.all([
             usersAPI.getBookings(),
             usersAPI.getStats(),
+            usersAPI.getReviews(),
           ]);
 
           setPayload({
             bookings: bookingsResponse.data.data.map(normalizeBooking),
+            reviews: reviewsResponse.data.data || [],
             stats: statsResponse.data.data,
             users: [],
             chefs: [],
@@ -87,8 +92,26 @@ const DashboardPage = () => {
       usersAPI.getBookings(),
       usersAPI.getStats(),
     ]);
+    setPayload((current) => ({
+      bookings: bookingsResponse.data.data.map(normalizeBooking),
+      reviews: current.reviews,
+      stats: statsResponse.data.data,
+      users: [],
+      chefs: [],
+    }));
+  };
+
+  const handleCustomerReviewDelete = async (reviewId) => {
+    await reviewsAPI.remove(reviewId);
+    const [bookingsResponse, statsResponse, reviewsResponse] = await Promise.all([
+      usersAPI.getBookings(),
+      usersAPI.getStats(),
+      usersAPI.getReviews(),
+    ]);
+
     setPayload({
       bookings: bookingsResponse.data.data.map(normalizeBooking),
+      reviews: reviewsResponse.data.data || [],
       stats: statsResponse.data.data,
       users: [],
       chefs: [],
@@ -109,6 +132,7 @@ const DashboardPage = () => {
       users: usersResponse.data.data,
       chefs: chefsResponse.data.data,
       bookings: bookingsResponse.data.data.map(normalizeBooking),
+      reviews: [],
     });
   };
 
@@ -130,7 +154,14 @@ const DashboardPage = () => {
       ) : userRole === 'chef' ? (
         <ChefDashboard chef={{ ...user, ...chefProfile }} bookings={payload.bookings} onBookingAction={handleChefBookingAction} />
       ) : (
-        <UserDashboard user={user} bookings={payload.bookings} stats={payload.stats} onCancelBooking={handleCustomerCancel} />
+        <UserDashboard
+          user={user}
+          bookings={payload.bookings}
+          reviews={payload.reviews}
+          stats={payload.stats}
+          onCancelBooking={handleCustomerCancel}
+          onDeleteReview={handleCustomerReviewDelete}
+        />
       )}
     </div>
   );

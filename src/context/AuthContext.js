@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState, useContext } from 'react';
 import { authAPI, tokenStorage } from '../services/api';
+import { normalizeChefMedia } from '../utils/helpers';
 
 const AuthContext = createContext();
 
@@ -35,7 +36,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const response = await authAPI.getMe();
         setUser(response.data.data.user);
-        setChefProfile(response.data.data.chefProfile || null);
+        setChefProfile(normalizeChefMedia(response.data.data.chefProfile) || null);
         setIsAuthenticated(true);
       } catch (error) {
         tokenStorage.clear();
@@ -56,7 +57,7 @@ export const AuthProvider = ({ children }) => {
 
     tokenStorage.set(token);
     setUser(data.user);
-    setChefProfile(data.chefProfile || null);
+    setChefProfile(normalizeChefMedia(data.chefProfile) || null);
     setIsAuthenticated(true);
 
     return data.user;
@@ -68,7 +69,7 @@ export const AuthProvider = ({ children }) => {
 
     tokenStorage.set(token);
     setUser(data.user);
-    setChefProfile(data.chefProfile || null);
+    setChefProfile(normalizeChefMedia(data.chefProfile) || null);
     setIsAuthenticated(true);
 
     return data.user;
@@ -77,7 +78,7 @@ export const AuthProvider = ({ children }) => {
   const refreshAuth = async () => {
     const response = await authAPI.getMe();
     setUser(response.data.data.user);
-    setChefProfile(response.data.data.chefProfile || null);
+    setChefProfile(normalizeChefMedia(response.data.data.chefProfile) || null);
     setIsAuthenticated(true);
     return response.data.data;
   };

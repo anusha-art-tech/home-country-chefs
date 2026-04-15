@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
 import styles from './BookingCard.module.css';
 
-const BookingCard = ({ booking, type, onCancel }) => {
+const BookingCard = ({ booking, type, onCancel, review, onDeleteReview }) => {
   const navigate = useNavigate();
   const statusColors = {
     pending: '#e67e22',
@@ -55,7 +55,20 @@ const BookingCard = ({ booking, type, onCancel }) => {
           </div>
         )}
         {type === 'past' && (
-          <Button variant="outline" size="small" onClick={() => navigate(`/reviews/new/${booking.id}`)}>Write a Review</Button>
+          <div className={styles.actions}>
+            <Button
+              variant="outline"
+              size="small"
+              onClick={() => navigate(review ? `/reviews/${review.id}/edit` : `/reviews/new/${booking.id}`)}
+            >
+              {review ? 'Edit Review' : 'Write a Review'}
+            </Button>
+            {review && (
+              <Button variant="secondary" size="small" onClick={() => onDeleteReview?.(review.id)}>
+                Delete Review
+              </Button>
+            )}
+          </div>
         )}
       </div>
     </div>

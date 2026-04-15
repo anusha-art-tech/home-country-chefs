@@ -10,6 +10,7 @@ import DashboardPage from './pages/DashboardPage';
 import ReviewPage from './pages/ReviewPage';
 import ProfilePage from './pages/ProfilePage';
 import CuisinesPage from './pages/CuisinesPage';
+import FavoritesPage from './pages/FavoritesPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import LoginPage from './pages/LoginPage';
@@ -31,12 +32,19 @@ const PublicRoute = ({ children }) => {
   return !isAuthenticated ? children : <Navigate to="/dashboard" replace />;
 };
 
+// Home Route - Send authenticated users to dashboard
+const HomeRoute = () => {
+  const { isAuthenticated, authLoading } = useAuth();
+  if (authLoading) return <LoadingSpinner />;
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <HomePage />;
+};
+
 // Main App Content
 const AppContent = () => {
   return (
     <Routes>
       {/* Public Routes - Everyone can access */}
-      <Route path="/" element={<HomePage />} />
+      <Route path="/" element={<HomeRoute />} />
       <Route path="/chefs" element={<ChefsPage />} />
       <Route path="/chef/:id" element={<ChefDetailPage />} />
       <Route path="/about" element={<AboutPage />} />
@@ -94,7 +102,23 @@ const AppContent = () => {
         }
       />
       <Route
+        path="/favorites"
+        element={
+          <ProtectedRoute>
+            <FavoritesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/reviews/new/:bookingId"
+        element={
+          <ProtectedRoute>
+            <ReviewPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reviews/:reviewId/edit"
         element={
           <ProtectedRoute>
             <ReviewPage />

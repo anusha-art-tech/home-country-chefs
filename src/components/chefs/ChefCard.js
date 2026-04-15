@@ -5,7 +5,7 @@ import Button from '../common/Button';
 import { formatPrice } from '../../utils/helpers';
 import styles from './ChefCard.module.css';
 
-const ChefCard = ({ chef }) => {
+const ChefCard = ({ chef, isFavorite, favoriteDisabled, onToggleFavorite }) => {
   const navigate = useNavigate();
 
   return (
@@ -18,6 +18,17 @@ const ChefCard = ({ chef }) => {
           <span className={styles.verifiedBadge}>
             <i className="fas fa-check-circle"></i> Verified
           </span>
+        )}
+        {onToggleFavorite && (
+          <button
+            type="button"
+            className={`${styles.favoriteBtn} ${isFavorite ? styles.favoriteBtnActive : ''}`}
+            onClick={() => onToggleFavorite(chef)}
+            disabled={favoriteDisabled}
+            aria-label={isFavorite ? 'Remove from favourites' : 'Add to favourites'}
+          >
+            <i className={`${isFavorite ? 'fas' : 'far'} fa-heart`}></i>
+          </button>
         )}
       </div>
       

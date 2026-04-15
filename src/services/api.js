@@ -12,7 +12,7 @@ const api = axios.create({
 
 const getRequestConfig = (payload) => (
   payload instanceof FormData
-    ? { headers: { 'Content-Type': 'multipart/form-data' } }
+    ? { headers: {} }
     : undefined
 );
 
@@ -21,6 +21,11 @@ api.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
+  if (config.data instanceof FormData && config.headers) {
+    delete config.headers['Content-Type'];
+  }
+
   return config;
 });
 
@@ -46,8 +51,8 @@ export const chefsAPI = {
   search: (params = {}) => api.get('/chefs/search', { params }),
   updateProfile: (id, payload) => api.put(`/chefs/${id}`, payload, getRequestConfig(payload)),
   getCuisines: (id) => api.get(`/chefs/${id}/cuisines`),
-  createCuisine: (id, payload) => api.post(`/chefs/${id}/cuisines`, payload),
-  updateCuisine: (id, cuisineId, payload) => api.put(`/chefs/${id}/cuisines/${cuisineId}`, payload),
+  createCuisine: (id, payload) => api.post(`/chefs/${id}/cuisines`, payload, getRequestConfig(payload)),
+  updateCuisine: (id, cuisineId, payload) => api.put(`/chefs/${id}/cuisines/${cuisineId}`, payload, getRequestConfig(payload)),
   deleteCuisine: (id, cuisineId) => api.delete(`/chefs/${id}/cuisines/${cuisineId}`),
 };
 

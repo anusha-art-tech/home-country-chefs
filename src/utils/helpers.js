@@ -35,13 +35,63 @@ export const getInitials = (name) => {
 
 export const upcomingStatuses = ['pending', 'confirmed', 'in_progress'];
 
-export const normalizeChef = (chef) => {
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:7002/api';
+const API_ORIGIN = API_BASE_URL.replace(/\/api\/?$/, '');
+
+export const normalizeMediaUrl = (value) => {
+  if (!value || typeof value !== 'string') return value;
+
+  if (value.startsWith('data:') || value.startsWith('blob:')) {
+    return value;
+  }
+
+  // Keep third-party hosted assets untouched.
+  if (/^https?:\/\//i.test(value) && !value.includes('/uploads/')) {
+    return value;
+  }
+
+  try {
+    const parsed = new URL(value, API_ORIGIN);
+
+    if (parsed.pathname.startsWith('/uploads/')) {
+      return `${API_ORIGIN}${parsed.pathname}${parsed.search}${parsed.hash}`;
+    }
+
+    return parsed.toString();
+  } catch (_error) {
+    if (value.startsWith('/')) {
+      return `${API_ORIGIN}${value}`;
+    }
+
+    return value;
+  }
+};
+
+export const normalizeChefMedia = (chef) => {
   if (!chef) return null;
-  const reviewItems = Array.isArray(chef.reviews) ? chef.reviews : [];
   const cuisines = Array.isArray(chef.Cuisines) ? chef.Cuisines : [];
 
   return {
     ...chef,
+    profileImage: normalizeMediaUrl(chef.profileImage),
+    galleryImages: Array.isArray(chef.galleryImages)
+      ? chef.galleryImages.map(normalizeMediaUrl)
+      : [],
+    Cuisines: cuisines.map((item) => ({
+      ...item,
+      icon: normalizeMediaUrl(item.icon),
+    })),
+  };
+};
+
+export const normalizeChef = (chef) => {
+  if (!chef) return null;
+  const chefWithNormalizedMedia = normalizeChefMedia(chef);
+  const reviewItems = Array.isArray(chef.reviews) ? chef.reviews : [];
+  const cuisines = Array.isArray(chefWithNormalizedMedia.Cuisines) ? chefWithNormalizedMedia.Cuisines : [];
+
+  return {
+    ...chefWithNormalizedMedia,
     verified: chef.isVerified,
     reviewItems,
     reviews: chef.totalReviews ?? reviewItems.length ?? 0,
